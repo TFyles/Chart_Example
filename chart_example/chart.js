@@ -42,7 +42,7 @@ $(document).on("pagecreate", "#chartPage", function () {
 	  
 });
 
-function updateChart(random) {
+function updateChart() {
       	
       	//set new random y values
       	yVal = X;
@@ -68,6 +68,7 @@ function updateChart(random) {
 
 function startSensor() {
 	watchID = navigator.accelerometer.watchAcceleration( accelerometerSuccess, accelerometerError, accelerometerOptions);
+	updateChart();
 }
 
 function stopSensor() {
