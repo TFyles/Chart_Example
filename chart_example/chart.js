@@ -1,6 +1,10 @@
 var dps = [];   //dataPoints. 
 var chart;
 var startTime;
+var X;
+var Y;
+var Z;
+var timeStamp;
 
 $(document).on("pagecreate", "#chartPage", function () {
 	
@@ -8,12 +12,15 @@ $(document).on("pagecreate", "#chartPage", function () {
 	startTime = Date.now();
 	
 	//set uplistener for button
-	$('#addButton').on('click', function() {
-	
-		var randomValue = Math.random();
-		updateChart(randomValue);
+		//setup listener for the toggle switch
+	$("#flipswitch").on("change", function() {
 		
+		if( $(this).val() == "on" ) startSensor();
+		else if ( $(this).val() == "off" ) stopSensor();
+
 	});
+
+
 	
 	//setup chart
     chart = new CanvasJS.Chart("chartContainer",{
@@ -38,7 +45,7 @@ $(document).on("pagecreate", "#chartPage", function () {
 function updateChart(random) {
       	
       	//set new random y values
-      	yVal = random;
+      	yVal = X;
 		
 		//x value is time since start 
 		xVal = Date.now() - startTime;
@@ -57,4 +64,25 @@ function updateChart(random) {
 
 		//redraw the chart
       	chart.render();		
-	  }
+
+
+function startSensor() {
+	watchID = navigator.accelerometer.watchAcceleration( accelerometerSuccess, accelerometerError, accelerometerOptions);
+}
+
+function stopSensor() {
+	navigator.accelerometer.clearWatch(watchID);
+}
+
+function accelerometerSuccess(acceleration) {
+	
+	var X = acceleration.x;
+	var Y = acceleration.y;
+	var Z = acceleration.z ;
+	var timeStamp = acceleration.timestamp ;
+
+}
+
+function accelerometerError() {
+   alert('Error');
+}
